@@ -29,6 +29,7 @@ defmodule PolydashWeb.CoreComponents do
   use Phoenix.Component
   use Gettext, backend: PolydashWeb.Gettext
 
+  alias Phoenix.HTML.Form
   alias Phoenix.HTML.FormField
   alias Phoenix.LiveView.JS
 
@@ -200,7 +201,7 @@ defmodule PolydashWeb.CoreComponents do
   def input(%{type: "checkbox"} = assigns) do
     assigns =
       assign_new(assigns, :checked, fn ->
-        Phoenix.HTML.Form.normalize_value("checkbox", assigns[:value])
+        Form.normalize_value("checkbox", assigns[:value])
       end)
 
     ~H"""

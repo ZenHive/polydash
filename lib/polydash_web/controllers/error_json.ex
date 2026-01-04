@@ -12,9 +12,13 @@ defmodule PolydashWeb.ErrorJSON do
   #   %{errors: %{detail: "Internal Server Error"}}
   # end
 
-  # By default, Phoenix returns the status message from
-  # the template name. For example, "404.json" becomes
-  # "Not Found".
+  @doc """
+  Renders a JSON error response based on the template name.
+
+  Returns a map with the HTTP status message corresponding to the template.
+  For example, "404.json" becomes `%{errors: %{detail: "Not Found"}}`.
+  """
+  @spec render(String.t(), map()) :: %{errors: %{detail: String.t()}}
   def render(template, _assigns) do
     %{errors: %{detail: Phoenix.Controller.status_message_from_template(template)}}
   end

@@ -1,9 +1,15 @@
 defmodule PolydashWeb.Telemetry do
-  @moduledoc false
+  @moduledoc """
+  Telemetry supervisor for Polydash metrics collection.
+  """
   use Supervisor
 
   import Telemetry.Metrics
 
+  @doc """
+  Starts the telemetry supervisor.
+  """
+  @spec start_link(term()) :: Supervisor.on_start()
   def start_link(arg) do
     Supervisor.start_link(__MODULE__, arg, name: __MODULE__)
   end
@@ -21,6 +27,10 @@ defmodule PolydashWeb.Telemetry do
     Supervisor.init(children, strategy: :one_for_one)
   end
 
+  @doc """
+  Returns the list of telemetry metrics to be collected.
+  """
+  @spec metrics() :: [Telemetry.Metrics.t()]
   def metrics do
     [
       # Phoenix Metrics

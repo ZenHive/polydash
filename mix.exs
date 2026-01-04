@@ -63,6 +63,7 @@ defmodule Polydash.MixProject do
       {:bandit, "~> 1.5"},
 
       # Dev/test tools
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:styler, "~> 1.9", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.13", only: [:dev, :test], runtime: false},

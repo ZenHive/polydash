@@ -1,4 +1,7 @@
 defmodule PolydashWeb.Endpoint do
+  @moduledoc """
+  Phoenix endpoint for Polydash web application.
+  """
   use Phoenix.Endpoint, otp_app: :polydash
 
   # The session will be stored in the cookie and signed,
