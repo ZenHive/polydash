@@ -45,6 +45,19 @@ config :polydash, PolydashWeb.Endpoint,
   pubsub_server: Polydash.PubSub,
   live_view: [signing_salt: "Vt8Vsmnm"]
 
+config :polydash, :scopes,
+  user: [
+    default: true,
+    module: Polydash.Accounts.Scope,
+    assign_key: :current_scope,
+    access_path: [:user, :id],
+    schema_key: :user_id,
+    schema_type: :binary_id,
+    schema_table: :users,
+    test_data_fixture: Polydash.AccountsFixtures,
+    test_setup_helper: :register_and_log_in_user
+  ]
+
 config :polydash,
   ecto_repos: [Polydash.Repo],
   generators: [timestamp_type: :utc_datetime, binary_id: true]
