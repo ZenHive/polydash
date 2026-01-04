@@ -32,6 +32,7 @@ defmodule PolydashWeb.CoreComponents do
   alias Phoenix.HTML.Form
   alias Phoenix.HTML.FormField
   alias Phoenix.LiveView.JS
+  alias Phoenix.LiveView.Rendered
 
   @doc """
   Renders flash notices.
@@ -49,6 +50,7 @@ defmodule PolydashWeb.CoreComponents do
 
   slot :inner_block, doc: "the optional inner block that renders the flash message"
 
+  @spec flash(map()) :: Rendered.t()
   def flash(assigns) do
     assigns = assign_new(assigns, :id, fn -> "flash-#{assigns.kind}" end)
 
@@ -95,6 +97,7 @@ defmodule PolydashWeb.CoreComponents do
   attr :variant, :string, values: ~w(primary)
   slot :inner_block, required: true
 
+  @spec button(map()) :: Rendered.t()
   def button(%{rest: rest} = assigns) do
     variants = %{"primary" => "btn-primary", nil => "btn-primary btn-soft"}
 
@@ -181,6 +184,7 @@ defmodule PolydashWeb.CoreComponents do
   attr :rest, :global, include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
                 multiple pattern placeholder readonly required rows size step)
 
+  @spec input(map()) :: Rendered.t()
   def input(%{field: %FormField{} = field} = assigns) do
     errors = if Phoenix.Component.used_input?(field), do: field.errors, else: []
 
@@ -312,6 +316,7 @@ defmodule PolydashWeb.CoreComponents do
   slot :subtitle
   slot :actions
 
+  @spec header(map()) :: Rendered.t()
   def header(assigns) do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", "pb-4"]}>
@@ -353,6 +358,7 @@ defmodule PolydashWeb.CoreComponents do
 
   slot :action, doc: "the slot for showing user actions in the last table column"
 
+  @spec table(map()) :: Rendered.t()
   def table(assigns) do
     assigns =
       with %{rows: %Phoenix.LiveView.LiveStream{}} <- assigns do
@@ -405,6 +411,7 @@ defmodule PolydashWeb.CoreComponents do
     attr :title, :string, required: true
   end
 
+  @spec list(map()) :: Rendered.t()
   def list(assigns) do
     ~H"""
     <ul class="list">
@@ -439,6 +446,7 @@ defmodule PolydashWeb.CoreComponents do
   attr :name, :string, required: true
   attr :class, :any, default: "size-4"
 
+  @spec icon(map()) :: Rendered.t()
   def icon(%{name: "hero-" <> _} = assigns) do
     ~H"""
     <span class={[@name, @class]} />
@@ -447,6 +455,18 @@ defmodule PolydashWeb.CoreComponents do
 
   ## JS Commands
 
+  # Dialyzer warns about %JS{} default vs opaque JS.t() - this is a known false positive
+  @dialyzer {:nowarn_function, show: 1, show: 2, hide: 1, hide: 2}
+
+  @doc """
+  Shows an element with a transition animation.
+
+  ## Examples
+
+      show("#modal")
+      show(js, "#dropdown")
+  """
+  @spec show(JS.t(), String.t()) :: JS.t()
   def show(js \\ %JS{}, selector) do
     JS.show(js,
       to: selector,
@@ -457,6 +477,15 @@ defmodule PolydashWeb.CoreComponents do
     )
   end
 
+  @doc """
+  Hides an element with a transition animation.
+
+  ## Examples
+
+      hide("#modal")
+      hide(js, "#dropdown")
+  """
+  @spec hide(JS.t(), String.t()) :: JS.t()
   def hide(js \\ %JS{}, selector) do
     JS.hide(js,
       to: selector,
@@ -470,6 +499,7 @@ defmodule PolydashWeb.CoreComponents do
   @doc """
   Translates an error message using gettext.
   """
+  @spec translate_error({String.t(), keyword()}) :: String.t()
   def translate_error({msg, opts}) do
     # When using gettext, we typically pass the strings we want
     # to translate as a static argument:
@@ -491,6 +521,7 @@ defmodule PolydashWeb.CoreComponents do
   @doc """
   Translates the errors for a field from a keyword list of errors.
   """
+  @spec translate_errors(keyword(), atom()) :: [String.t()]
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end

@@ -18,9 +18,11 @@ defmodule PolydashWeb do
   """
 
   @doc false
+  @spec static_paths() :: [String.t()]
   def static_paths, do: ~w(assets fonts images favicon.ico robots.txt)
 
   @doc false
+  @spec router() :: Macro.t()
   def router do
     quote do
       use Phoenix.Router, helpers: false
@@ -34,6 +36,7 @@ defmodule PolydashWeb do
   end
 
   @doc false
+  @spec channel() :: Macro.t()
   def channel do
     quote do
       use Phoenix.Channel
@@ -41,6 +44,7 @@ defmodule PolydashWeb do
   end
 
   @doc false
+  @spec controller() :: Macro.t()
   def controller do
     quote do
       use Phoenix.Controller, formats: [:html, :json]
@@ -53,6 +57,7 @@ defmodule PolydashWeb do
   end
 
   @doc false
+  @spec live_view() :: Macro.t()
   def live_view do
     quote do
       use Phoenix.LiveView
@@ -62,6 +67,7 @@ defmodule PolydashWeb do
   end
 
   @doc false
+  @spec live_component() :: Macro.t()
   def live_component do
     quote do
       use Phoenix.LiveComponent
@@ -71,6 +77,7 @@ defmodule PolydashWeb do
   end
 
   @doc false
+  @spec html() :: Macro.t()
   def html do
     quote do
       use Phoenix.Component
@@ -84,6 +91,7 @@ defmodule PolydashWeb do
     end
   end
 
+  @spec html_helpers() :: Macro.t()
   defp html_helpers do
     quote do
       # Translation
@@ -104,6 +112,7 @@ defmodule PolydashWeb do
   end
 
   @doc false
+  @spec verified_routes() :: Macro.t()
   def verified_routes do
     quote do
       use Phoenix.VerifiedRoutes,

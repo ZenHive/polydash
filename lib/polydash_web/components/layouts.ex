@@ -5,6 +5,8 @@ defmodule PolydashWeb.Layouts do
   """
   use PolydashWeb, :html
 
+  alias Phoenix.LiveView.Rendered
+
   # Embed all files in layouts/* within this module.
   # The default root.html.heex file contains the HTML
   # skeleton of your application, namely HTML headers
@@ -33,6 +35,7 @@ defmodule PolydashWeb.Layouts do
 
   slot :inner_block, required: true
 
+  @spec app(map()) :: Rendered.t()
   def app(assigns) do
     ~H"""
     <header class="navbar px-4 sm:px-6 lg:px-8">
@@ -82,6 +85,7 @@ defmodule PolydashWeb.Layouts do
   attr :flash, :map, required: true, doc: "the map of flash messages"
   attr :id, :string, default: "flash-group", doc: "the optional id of flash container"
 
+  @spec flash_group(map()) :: Rendered.t()
   def flash_group(assigns) do
     ~H"""
     <div id={@id} aria-live="polite">
@@ -93,7 +97,7 @@ defmodule PolydashWeb.Layouts do
         kind={:error}
         title={gettext("We can't find the internet")}
         phx-disconnected={show(".phx-client-error #client-error") |> JS.remove_attribute("hidden")}
-        phx-connected={hide("#client-error") |> JS.set_attribute({"hidden", ""})}
+        phx-connected={hide_with_hidden_attr("#client-error")}
         hidden
       >
         {gettext("Attempting to reconnect")}
@@ -105,7 +109,7 @@ defmodule PolydashWeb.Layouts do
         kind={:error}
         title={gettext("Something went wrong!")}
         phx-disconnected={show(".phx-server-error #server-error") |> JS.remove_attribute("hidden")}
-        phx-connected={hide("#server-error") |> JS.set_attribute({"hidden", ""})}
+        phx-connected={hide_with_hidden_attr("#server-error")}
         hidden
       >
         {gettext("Attempting to reconnect")}
@@ -115,11 +119,18 @@ defmodule PolydashWeb.Layouts do
     """
   end
 
+  # Helper to hide element and set hidden attribute - isolates dialyzer opaque warning
+  @dialyzer {:no_opaque, hide_with_hidden_attr: 1}
+  defp hide_with_hidden_attr(selector) do
+    selector |> hide() |> JS.set_attribute({"hidden", ""})
+  end
+
   @doc """
   Provides dark vs light theme toggle based on themes defined in app.css.
 
   See <head> in root.html.heex which applies the theme before page load.
   """
+  @spec theme_toggle(map()) :: Rendered.t()
   def theme_toggle(assigns) do
     ~H"""
     <div class="card relative flex flex-row items-center border-2 border-base-300 bg-base-300 rounded-full">
