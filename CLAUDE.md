@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+@~/.claude/includes/verification-policy.md
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 @include ~/.claude/includes/across-instances.md
@@ -97,7 +99,7 @@ Use the built-in `<.icon>` component:
 
 ## Project Guidelines
 
-- Use `mix precommit` before finishing changes
+- Select scoped checks using the imported verification policy
 - Use `:req` (Req) for HTTP requests, not HTTPoison/Tesla/httpc
 - Router scopes auto-alias modules (no manual alias needed)
 - Never nest multiple modules in the same file
